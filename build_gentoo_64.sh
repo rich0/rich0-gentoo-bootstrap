@@ -29,7 +29,7 @@ fi
 
 if [[ $group == "" ]]; then
     echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: set up group"
-    group="gentoo-bootstrap"
+    group="gentoo-bootstrap_64-bit"
 
     group_exists=`ec2-describe-group \
             --region $region \
@@ -37,7 +37,7 @@ if [[ $group == "" ]]; then
             | wc -c`
 
     if [ $group_exists -eq 0 ]; then
-        ec2-create-group --region $region $group --description "Gentoo Bootstrap"
+        ec2-create-group --region $region $group --description "Gentoo Bootstrap 64-bit"
     fi
 
     ec2-authorize --region $region $group -P tcp -p 22 -s 0.0.0.0/0
@@ -47,8 +47,8 @@ fi
 
 if [[ $key == "" || $keyfile == "" ]]; then
     echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: set up key"
-    key="gentoo-bootstrap_$region"
-    keyfile="gentoo-bootstrap_$region.pem"
+    key="gentoo-bootstrap_64-bit_$region"
+    keyfile="gentoo-bootstrap_64-bit_$region.pem"
    
     if [ ! -f $keyfile ]; then
         ec2-add-keypair --region $region $key | sed 1d > $keyfile
