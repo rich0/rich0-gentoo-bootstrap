@@ -274,4 +274,7 @@ else
 fi
 
 echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: gentoo image-id = $gentoo_image"
+echo "-----"
+echo "ec2-modify-image-attribute --region $region $gentoo_image --launch-permission --add all"
+echo "<tr><td>$region</td><td>$gentoo_image</td><td>x86_64</td><td>ebs</td><td>$latest_kernel</td><td>$name</td></tr>"
 
