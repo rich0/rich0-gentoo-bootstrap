@@ -8,7 +8,7 @@ mount /dev/xvdf /mnt/gentoo
 
 cd /tmp
 echo "Download stage3"
-curl -O http://gentoo.mirrors.pair.com/releases/x86/autobuilds/`curl --silent http://gentoo.mirrors.pair.com/releases/x86/autobuilds/latest-stage3-i686.txt | grep stage3-i686`
+curl -O http://gentoo.mirrors.pair.com/releases/amd64/autobuilds/`curl --silent http://gentoo.mirrors.pair.com/releases/amd64/autobuilds/latest-stage3-amd64.txt | grep stage3-amd64`
 echo "Download portage"
 curl -O http://gentoo.mirrors.pair.com/snapshots/portage-latest.tar.bz2
 echo "Unpack stage3"
@@ -31,7 +31,6 @@ EOF
 echo "/etc/fstab"
 cat <<'EOF'>/mnt/gentoo/etc/fstab
 /dev/xvda1 / ext4 defaults 1 1
-/dev/xvda3 none swap sw 0 0
 none /dev/pts devpts gid=5,mode=620 0 0
 none /dev/shm tmpfs defaults 0 0
 none /proc proc defaults 0 0
@@ -83,12 +82,14 @@ cat <<'EOF'>/mnt/gentoo/etc/make.conf
 # built this stage.
 # Please consult /usr/share/portage/config/make.conf.example for a more
 # detailed example.
-CFLAGS="-O2 -march=i686 -mno-tls-direct-seg-refs -pipe"
+CFLAGS="-O2 -pipe"
 CXXFLAGS="${CFLAGS}"
 # WARNING: Changing your CHOST is not something that should be done lightly.
 # Please consult http://www.gentoo.org/doc/en/change-chost.xml before changing.
-CHOST="i686-pc-linux-gnu"
-MAKEOPTS="-j3"
+CHOST="x86_64-pc-linux-gnu"
+# These are the USE flags that were used in addition to what is provided by the
+# profile used for building.
+USE="mmx sse sse2"
 MAKEOPTS="-j9"
 EOF
 
@@ -111,9 +112,6 @@ EOF
 chmod 440 /mnt/gentoo/etc/sudoers.d/_sudo
 
 echo "/usr/src/linux/.config"
-if [ ! -f /tmp/.config ]; then 
-curl --silent -o /tmp/.config http://public.dowdandassociates.com/content/gentoo-cloud-bootstrapping-gentoo-images/x86/usr/src/linux/.config;
-fi
 mkdir -p /mnt/gentoo/tmp
 cp /tmp/.config /mnt/gentoo/tmp/.config
 
@@ -121,6 +119,7 @@ mkdir -p /mnt/gentoo/var/lib/portage
 echo "/var/lib/portage/world"
 cat <<'EOF'>/mnt/gentoo/var/lib/portage/world
 app-admin/logrotate
+app-admin/mcelog
 app-admin/sudo
 app-admin/syslog-ng
 app-arch/unzip
@@ -154,7 +153,7 @@ cd /usr/src/linux
 mv /tmp/.config ./.config
 yes "" | make oldconfig
 make -j9 && make -j9 modules_install
-cp -L arch/x86/boot/bzImage /boot/bzImage
+cp -L arch/x86_64/boot/bzImage /boot/bzImage
 
 groupadd sudo
 useradd -r -m -s /bin/bash ec2-user

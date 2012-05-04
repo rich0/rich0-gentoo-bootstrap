@@ -140,18 +140,14 @@ echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: Wait 60 seconds, just i
 
 sleep 60
 
-echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: copying remote_gentoo_32.sh to remote server"
+echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: copying files to remote server"
 
-scp -o StrictHostKeyChecking=no -i $keyfile remote_gentoo_32.sh ec2-user@$server:/tmp/remote_gentoo_32.sh
+scp -o StrictHostKeyChecking=no -i $keyfile i386/* i386/.* ec2-user@$server:/tmp
 
-if [ -f "32-bit/.config" ]; then
-    scp -o StrictHostKeyChecking=no -i $keyfile 32-bit/.config ec2-user@$server:/tmp/.config
-fi
+echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: setting remote_gentoo.sh as executable on remote server"
 
-echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: setting remote_gentoo_32.sh as executable on remote server"
-
-ssh -o StrictHostKeyChecking=no -i $keyfile ec2-user@$server "chmod 755 /tmp/remote_gentoo_32.sh"
-ssh -o StrictHostKeyChecking=no -i $keyfile -t ec2-user@$server "sudo /tmp/remote_gentoo_32.sh"
+ssh -o StrictHostKeyChecking=no -i $keyfile ec2-user@$server "chmod 755 /tmp/remote_gentoo.sh"
+ssh -o StrictHostKeyChecking=no -i $keyfile -t ec2-user@$server "sudo /tmp/remote_gentoo.sh"
 
 echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: checking if install is done"
 
@@ -262,7 +258,7 @@ sleep 60
 echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: checking connection"
 up_check=`ssh -o StrictHostKeyChecking=no -i $keyfile -t ec2-user@$server "uname -a" | wc -c`
 
-if [ up_check -ne 0 ]; then
+if [ $up_check -ne 0 ]; then
     echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: connection successful"
     echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: terminating instances"
     ec2-terminate-instances --region $region $instance $gentoo_instance

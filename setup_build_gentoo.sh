@@ -1,5 +1,7 @@
 #!/bin/bash
 
+outputdir=/tmp
+
 # The region to install into
 #region="us-east-1"
 region=$1
@@ -20,7 +22,7 @@ key=$3
 keyfile=$4
 
 
-building="Gentoo 64 EBS"
+building="Gentoo"
 start_time=`date +%Y-%m-%dT%H:%M:%S`
 
 if [[ $region == "" ]]; then
@@ -57,5 +59,8 @@ if [[ $key == "" || $keyfile == "" ]]; then
     chmod 600 $keyfile
     echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: key set up"
 fi
+
+echo ./build_gentoo_64.sh $region $group $key $keyfile
+echo ./build_gentoo_32.sh $region $group $key $keyfile
 
 
