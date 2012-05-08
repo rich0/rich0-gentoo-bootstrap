@@ -89,7 +89,6 @@ CXXFLAGS="${CFLAGS}"
 # Please consult http://www.gentoo.org/doc/en/change-chost.xml before changing.
 CHOST="i686-pc-linux-gnu"
 MAKEOPTS="-j3"
-MAKEOPTS="-j9"
 EOF
 
 mkdir -p /mnt/gentoo/etc/portage
@@ -150,7 +149,7 @@ emerge --update --deep --with-bdeps=y --newuse world
 cd /usr/src/linux
 mv /tmp/.config ./.config
 yes "" | make oldconfig
-make -j9 && make -j9 modules_install
+make -j3 && make -j3 modules_install
 cp -L arch/x86/boot/bzImage /boot/bzImage
 
 groupadd sudo
