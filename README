@@ -52,3 +52,15 @@ keyfile
 
 --------------------------------------------------------------------------------
 
+x86_64/remote_gentoo.sh & i386/remote_gentoo.sh
+
+The script to be copied to and executed on bootstrap instance.
+
+--------------------------------------------------------------------------------
+
+x86_64/.config & i386/.config
+
+The .config file for building the kernel.
+
+--------------------------------------------------------------------------------
+
