@@ -145,6 +145,8 @@ app-editors/nano
 app-editors/vim
 app-misc/screen
 app-portage/gentoolkit
+dev-vcs/git
+net-misc/curl
 net-misc/dhcpcd
 net-misc/ntp
 sys-fs/lvm2
