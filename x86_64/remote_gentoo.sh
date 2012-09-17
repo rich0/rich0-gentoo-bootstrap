@@ -153,7 +153,8 @@ net-misc/ntp
 sys-fs/lvm2
 sys-fs/mdadm
 sys-kernel/gentoo-sources
-sys-process/vixie-cron
+sys-process/fcron
+sys-process/atop
 EOF
 
 echo "/tmp/build.sh"
@@ -184,7 +185,7 @@ ln -s /etc/init.d/net.lo /etc/init.d/net.eth0
 rc-update add net.eth0 default
 rc-update add sshd default
 rc-update add syslog-ng default
-rc-update add vixie-cron default
+rc-update add fcron default
 rc-update add ntpd default
 rc-update add lvm boot
 rc-update add mdraid boot
