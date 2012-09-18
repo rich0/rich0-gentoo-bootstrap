@@ -108,7 +108,7 @@ CHOST="x86_64-pc-linux-gnu"
 # These are the USE flags that were used in addition to what is provided by the
 # profile used for building.
 USE="mmx sse sse2"
-MAKEOPTS="-j5"
+MAKEOPTS="-j9"
 EMERGE_DEFAULT_OPTS="--jobs=4 --load-average=8.0"
 EOF
 
