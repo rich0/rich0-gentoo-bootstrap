@@ -142,9 +142,9 @@ $instance \
 
 echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: hostname = $server"
 
-echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: Wait 60 seconds, just in case, for server to finish coming up"
+echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: Wait 120 seconds, just in case, for server to finish coming up"
 
-sleep 60
+sleep 120
 
 echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: copying files to remote server"
 
