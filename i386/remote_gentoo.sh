@@ -107,6 +107,7 @@ CXXFLAGS="${CFLAGS}"
 # Please consult http://www.gentoo.org/doc/en/change-chost.xml before changing.
 CHOST="i686-pc-linux-gnu"
 MAKEOPTS="-j3"
+EMERGE_DEFAULT_OPTS= "--jobs=2 --load-average=3.0"
 EOF
 
 mkdir -p /mnt/gentoo/etc/portage
@@ -149,7 +150,8 @@ net-misc/ntp
 sys-fs/lvm2
 sys-fs/mdadm
 sys-kernel/gentoo-sources
-sys-process/vixie-cron
+sys-process/fcron
+sys-process/atop
 EOF
 
 echo "/tmp/build.sh"
@@ -180,7 +182,7 @@ ln -s /etc/init.d/net.lo /etc/init.d/net.eth0
 rc-update add net.eth0 default
 rc-update add sshd default
 rc-update add syslog-ng default
-rc-update add vixie-cron default
+rc-update add fcron default
 rc-update add ntpd default
 rc-update add lvm boot
 rc-update add mdraid boot
