@@ -123,7 +123,7 @@ instance=`ec2-run-instances \
 $boot_image \
 --group $group \
 --key $key \
---instance-type c1.large \
+--instance-type c1.medium \
 --block-device-mapping "/dev/sdf=:10" \
 | grep "^INSTANCE" \
 | awk '{ print $2 }'`
