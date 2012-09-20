@@ -176,7 +176,7 @@ emerge --update --deep --with-bdeps=y --newuse world
 cd /usr/src/linux
 mv /tmp/.config ./.config
 yes "" | make oldconfig
-make -j9 && make -j9 modules_install
+make -j3 && make -j3 modules_install
 cp -L arch/x86_64/boot/bzImage /boot/bzImage
 
 groupadd sudo
