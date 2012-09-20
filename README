@@ -24,7 +24,7 @@ The key pair will be created if needed.
 
 build_gentoo_64.sh
 
-Builds 64 bit Gentoo image. Will use a c1.xlarge for bootstrap instance.
+Builds 64 bit Gentoo image. Will use a c1.medium for bootstrap instance.
 Will use a t1.micro as test instance.
 Because sudo will be called, this script cannot be run in the backgroud.
 Recommend running screen before running.
@@ -61,6 +61,55 @@ The script to be copied to and executed on bootstrap instance.
 x86_64/.config & i386/.config
 
 The .config file for building the kernel.
+
+--------------------------------------------------------------------------------
+================================================================================
+Updates
+================================================================================
+
+Gentoo updates should normally be done manually in case an incorrectly done
+upgrade may render the system unusable. The purpose of these scripts is to do
+the same update across regions quickly.
+
+The plan is to manually do the update in one region and record the actions
+in ${architecture}/update_gentoo.sh. Once done these scripts can be used to
+replay it in the other regions.
+
+--------------------------------------------------------------------------------
+
+update_gentoo_64.sh
+
+Updates the latest 64-bit Dowd and Associates Gentoo Linux AMI. Will use a
+c1.medium instance for upgrade and t1.micro as a test instance.
+Because sudo will be called, this script cannot be run in the background.
+Recommend running screen before running.
+
+Takes 4 options:
+region 
+security group
+key pair
+keyfile
+
+--------------------------------------------------------------------------------
+
+update_gentoo_32.sh
+
+Updates the latest 64-bit Dowd and Associates Gentoo Linux AMI. Will use a
+c1.medium instance for upgrade and t1.micro as a test instance.
+Because sudo will be called, this script cannot be run in the background.
+Recommend running screen before running.
+
+Takes 4 options:
+region 
+security group
+key pair
+keyfile
+
+--------------------------------------------------------------------------------
+
+x86_64/update_gentoo.sh & i386/update_gentoo.sh
+
+The script to be copied to and executed on update instance.
 
 --------------------------------------------------------------------------------
 
