@@ -17,6 +17,8 @@
 # limitations under the License.
 #-------------------------------------------------------------------------------
 
+[ -e /tmp/plugin ] && . /tmp/plugin
+
 echo "mkfs -t ext4 /dev/xvdf"
 mkfs -t ext4 /dev/xvdf
 echo "mkdir -p /mnt/gentoo"
@@ -193,6 +195,8 @@ rm /etc/make.conf.bkup
 
 EOF
 
+plugin_prebuild
+
 chmod 755 /mnt/gentoo/tmp/build.sh
 
 mount -t proc none /mnt/gentoo/proc
@@ -200,6 +204,8 @@ mount --rbind /dev /mnt/gentoo/dev
 mount --rbind /dev/pts /mnt/gentoo/dev/pts
 
 chroot /mnt/gentoo /tmp/build.sh
+
+plugin_postbuild
 
 rm -fR /mnt/gentoo/tmp/*
 rm -fR /mnt/gentoo/var/tmp/*

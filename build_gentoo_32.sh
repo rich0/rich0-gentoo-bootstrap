@@ -36,9 +36,14 @@ key=$3
 #keyfile="$HOME/.ssh/example.pem"
 keyfile=$4
 
+# Plugin to install
+if [[ -e $5 ]] ; then
+    plugin=$5
+fi
+
 #-----
 
-building="Gentoo 32 EBS"
+building="Gentoo 32 EBS - $plugin"
 start_time=`date +%Y-%m-%dT%H:%M:%S`
 
 if [[ $region == "" ]]; then
@@ -195,10 +200,11 @@ sleep 120
 echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: copying files to remote server"
 
 scp -o StrictHostKeyChecking=no -i $keyfile i386/* i386/.* ec2-user@$server:/tmp
+scp -o StrictHostKeyChecking=no -i $keyfile $plugin ec2-user@$server:/tmp/plugin
 
 echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: setting remote_gentoo.sh as executable on remote server"
 
-ssh -o StrictHostKeyChecking=no -i $keyfile ec2-user@$server "chmod 755 /tmp/remote_gentoo.sh"
+ssh -o StrictHostKeyChecking=no -i $keyfile ec2-user@$server "chmod 755 /tmp/remote_gentoo.sh /tmp/plugin"
 ssh -o StrictHostKeyChecking=no -i $keyfile -t ec2-user@$server "sudo /tmp/remote_gentoo.sh"
 
 echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: checking if install is done"
@@ -216,7 +222,7 @@ done
 
 echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: install is done"
 
-name="Gentoo_32-bit-EBS-`date +%Y-%m-%d-%H-%M-%S`"
+name="Gentoo_32-bit-EBS-$plugin-`date +%Y-%m-%d-%H-%M-%S`"
 
 echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: creating snapshot"
 
@@ -250,7 +256,7 @@ echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: register image"
 gentoo_image=`ec2-register \
 --region $region \
 --name $name \
---description "Gentoo 32-bit EBS" \
+--description "Gentoo 32-bit EBS - $plugin" \
 --architecture i386 \
 --kernel $latest_kernel \
 --root-device-name /dev/sda1 \

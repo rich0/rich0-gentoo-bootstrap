@@ -1,0 +1,14 @@
+# Test plugin
+
+plugin_prebuild ()
+{
+cat <<'EOF' >> /mnt/gentoo/var/lib/portage/world
+app-portage/eix
+app-portage/cfg-update
+EOF
+}
+
+plugin_postbuild ()
+{
+chroot /mnt/gentoo /usr/bin/eix-update
+}
