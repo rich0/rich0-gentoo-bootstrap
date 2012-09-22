@@ -117,15 +117,39 @@ echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: bootstrap image = $boot
 
 echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: starting bootstrap instance"
 
-instance=`ec2-run-instances \
+spotreq=`ec2-request-spot-instances \
+--price .3 \
 --region $region \
 $boot_image \
 --group $group \
 --key $key \
 --instance-type c1.medium \
---block-device-mapping "/dev/sdf=:10" \
-| grep "^INSTANCE" \
+--block-device-mapping "/dev/sdf=:10:false" \
+| grep "^SPOTINSTANCEREQUEST" \
 | awk '{ print $2 }'`
+
+echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: bootstrap spot request = $spotreq"
+
+echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: start checking if instance is created"
+running_check=0
+while [ $running_check -eq 0 ]; do
+    sleep 10
+    echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: checking if instance is created (10 second check)"
+    let running_check=`ec2-describe-spot-instance-requests \
+            --region $region \
+            $spotreq \
+            --filter state=active \
+	    --show-empty-fields \
+            | wc -c`
+done
+
+instance=`ec2-describe-spot-instance-requests \
+            --region $region \
+            $spotreq \
+            --filter state=active \
+	    --show-empty-fields \
+| grep "^SPOTINSTANCEREQUEST" \
+| awk '{ print $12 }'`
 
 echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: bootstrap instance = $instance"
 
@@ -152,6 +176,16 @@ $instance \
 | grep "^INSTANCE" \
 | awk '{ print $4 }'`
 
+echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: get volume gentoo was installed on"
+volume=`ec2-describe-volumes \
+--region $region \
+--filter attachment.instance-id=$instance \
+--filter attachment.device=/dev/sdf \
+| grep "^VOLUME" \
+| awk '{ print $2 } '`
+
+echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: volume = $volume"
+
 echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: hostname = $server"
 
 echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: Wait 120 seconds, just in case, for server to finish coming up"
@@ -176,21 +210,11 @@ while [ $stopped_check -eq 0 ]; do
     let stopped_check=`ec2-describe-instances \
             --region $region \
             $instance \
-            --filter instance-state-name=stopped \
+            --filter instance-state-name=terminated \
             | wc -c`
 done
 
 echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: install is done"
-
-echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: get volume gentoo was installed on"
-volume=`ec2-describe-volumes \
---region $region \
---filter attachment.instance-id=$instance \
---filter attachment.device=/dev/sdf \
-| grep "^VOLUME" \
-| awk '{ print $2 } '`
-
-echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: volume = $volume"
 
 name="Gentoo_32-bit-EBS-`date +%Y-%m-%d-%H-%M-%S`"
 
@@ -216,6 +240,10 @@ while [ $completed_check -eq 0 ]; do
 done
 
 echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: snapshot is done"
+
+ec2-delete-volume $volume
+
+echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: volume $volume is deleted"
 
 echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: register image"
 

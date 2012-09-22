@@ -107,7 +107,7 @@ CXXFLAGS="${CFLAGS}"
 # Please consult http://www.gentoo.org/doc/en/change-chost.xml before changing.
 CHOST="i686-pc-linux-gnu"
 MAKEOPTS="-j3"
-EMERGE_DEFAULT_OPTS= "--jobs=2 --load-average=3.0"
+EMERGE_DEFAULT_OPTS= "--jobs=2 --load-average=4.0"
 EOF
 
 mkdir -p /mnt/gentoo/etc/portage
