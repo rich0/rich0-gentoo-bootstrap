@@ -49,6 +49,7 @@ EOF
 echo "/etc/fstab"
 cat <<'EOF'>/mnt/gentoo/etc/fstab
 /dev/xvda1 / ext4 defaults 1 1
+/dev/xvda3 none swap sw 0 0
 none /dev/pts devpts gid=5,mode=620 0 0
 none /dev/shm tmpfs defaults 0 0
 none /proc proc defaults 0 0
@@ -138,7 +139,6 @@ mkdir -p /mnt/gentoo/var/lib/portage
 echo "/var/lib/portage/world"
 cat <<'EOF'>/mnt/gentoo/var/lib/portage/world
 app-admin/logrotate
-app-admin/mcelog
 app-admin/sudo
 app-admin/syslog-ng
 app-arch/unzip
@@ -174,7 +174,7 @@ emerge --update --deep --with-bdeps=y --newuse world
 cd /usr/src/linux
 mv /tmp/.config ./.config
 yes "" | make oldconfig
-make -j9 && make -j9 modules_install
+make -j4 && make -j4 modules_install
 cp -L arch/x86_64/boot/bzImage /boot/bzImage
 
 groupadd sudo
