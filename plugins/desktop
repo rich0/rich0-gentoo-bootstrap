@@ -1,0 +1,38 @@
+# Test plugin
+
+plugin_prebuild ()
+{
+cat <<'EOF' >> /mnt/gentoo/var/lib/portage/world
+app-portage/eix
+app-portage/cfg-update
+kde-base/kde-meta
+net-misc/x2goserver
+EOF
+
+cat <<'EOF' >> /mnt/gentoo/etc/make.conf
+USE="$USE X minizip"
+EOF
+
+# The stable nx is apparently broken.
+
+mkdir /mnt/gentoo/etc/portage
+cat <<'EOF' >> /mnt/gentoo/etc/portage/package.keywords
+net-misc/x2goserver
+net-misc/nx
+EOF
+
+rm /mnt/gentoo/etc/portage/make.profile
+ln -s /usr/portage/profiles/default/linux/x86/10.0/desktop/kde /mnt/gentoo/etc/portage/make.profile
+
+# gst-plugins-xvideo is apparently missing a libSM dependency
+
+chroot /mnt/gentoo /usr/sbin/env-update
+chroot /mnt/gentoo /usr/bin/emerge x11-libs/libSM
+
+}
+
+plugin_postbuild ()
+{
+chroot /mnt/gentoo /usr/bin/eix-update
+chroot /mnt/gentoo /usr/sbin/x2godbadmin --createdb
+}
