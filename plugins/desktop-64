@@ -10,7 +10,7 @@ net-misc/x2goserver
 EOF
 
 cat <<'EOF' >> /mnt/gentoo/etc/make.conf
-USE="$USE X minizip"
+USE="$USE X minizip qt3support"
 EOF
 
 # The stable nx is apparently broken.
@@ -22,7 +22,8 @@ net-misc/nx
 EOF
 
 rm /mnt/gentoo/etc/portage/make.profile
-ln -s /usr/portage/profiles/default/linux/x86/10.0/desktop/kde /mnt/gentoo/etc/portage/make.profile
+rm /mnt/gentoo/etc/make.profile
+ln -s /usr/portage/profiles/default/linux/amd64/10.0/desktop/kde /mnt/gentoo/etc/portage/make.profile
 
 # gst-plugins-xvideo is apparently missing a libSM dependency
 
@@ -31,6 +32,7 @@ mount --rbind /dev /mnt/gentoo/dev
 mount --rbind /dev/pts /mnt/gentoo/dev/pts
 
 chroot /mnt/gentoo /usr/sbin/env-update
+chroot /mnt/gentoo /usr/bin/emerge portage
 chroot /mnt/gentoo /usr/bin/emerge x11-libs/libSM
 
 umount /mnt/gentoo/proc
