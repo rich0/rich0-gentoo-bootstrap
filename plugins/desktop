@@ -7,6 +7,8 @@ app-portage/eix
 app-portage/cfg-update
 kde-base/kde-meta
 net-misc/x2goserver
+media-fonts/font-misc-misc
+media-fonts/font-cursor-misc
 EOF
 
 cat <<'EOF' >> /mnt/gentoo/etc/make.conf
