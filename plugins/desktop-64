@@ -36,6 +36,9 @@ mount --rbind /dev/pts /mnt/gentoo/dev/pts
 chroot /mnt/gentoo /usr/sbin/env-update
 chroot /mnt/gentoo /usr/bin/emerge portage
 chroot /mnt/gentoo /usr/bin/emerge x11-libs/libSM
+chroot /mnt/gentoo /usr/bin/emerge -u \<dev-lang/python-3
+chroot /mnt/gentoo /usr/sbin/python-updater
+chroot /mnt/gentoo /usr/bin/emerge -1 sip
 
 umount /mnt/gentoo/proc
 umount -l /mnt/gentoo/dev/pts
