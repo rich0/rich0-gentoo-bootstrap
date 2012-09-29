@@ -123,7 +123,7 @@ echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: bootstrap image = $boot
 echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: starting bootstrap instance"
 
 spotreq=`ec2-request-spot-instances \
---price .3 \
+--price .15 \
 --region $region \
 $boot_image \
 --group $group \
