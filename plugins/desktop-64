@@ -19,13 +19,9 @@ cat <<'EOF' >> /mnt/gentoo/etc/portage/package.use
 >=sys-libs/zlib-1.2.7 minizip
 EOF
 
-
-# The stable nx is apparently broken.
-
 mkdir /mnt/gentoo/etc/portage
 cat <<'EOF' >> /mnt/gentoo/etc/portage/package.keywords
 net-misc/x2goserver
-net-misc/nx
 EOF
 
 rm /mnt/gentoo/etc/portage/make.profile

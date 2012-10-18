@@ -15,12 +15,10 @@ cat <<'EOF' >> /mnt/gentoo/etc/make.conf
 USE="$USE X minizip"
 EOF
 
-# The stable nx is apparently broken.
 
 mkdir /mnt/gentoo/etc/portage
 cat <<'EOF' >> /mnt/gentoo/etc/portage/package.keywords
 net-misc/x2goserver
-net-misc/nx
 EOF
 
 rm /mnt/gentoo/etc/portage/make.profile
