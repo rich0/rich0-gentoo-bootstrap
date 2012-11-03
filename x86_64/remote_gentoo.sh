@@ -94,8 +94,10 @@ rm -f /home/ec2-user/.ssh/authorized_keys
 EOF
 chmod 755 /mnt/gentoo/etc/local.d/public-keys.stop
 
-echo "/etc/make.conf"
-cat <<'EOF'>/mnt/gentoo/etc/make.conf
+mkdir -p /mnt/gentoo/etc/portage
+
+echo "/etc/portage/make.conf"
+cat <<'EOF'>/mnt/gentoo/etc/portage/make.conf
 # These settings were set by the catalyst build script that automatically
 # built this stage.
 # Please consult /usr/share/portage/config/make.conf.example for a more
@@ -111,8 +113,6 @@ USE="mmx sse sse2"
 MAKEOPTS="-j3"
 EMERGE_DEFAULT_OPTS="--jobs=2 --load-average=3.0"
 EOF
-
-mkdir -p /mnt/gentoo/etc/portage
 
 echo "/etc/resolv.conf"
 cp -L /etc/resolv.conf /mnt/gentoo/etc/resolv.conf
@@ -192,9 +192,9 @@ rc-update add ntpd default
 rc-update add lvm boot
 rc-update add mdraid boot
 
-mv /etc/make.conf /etc/make.conf.bkup
-sed "s/MAKEOPTS=\"-j.*\"/MAKEOPTS=\"-j2\"/g" /etc/make.conf.bkup > /etc/make.conf
-rm /etc/make.conf.bkup
+mv /etc/portage/make.conf /etc/portage/make.conf.bkup
+sed "s/MAKEOPTS=\"-j.*\"/MAKEOPTS=\"-j2\"/g" /etc/portage/make.conf.bkup > /etc/portage/make.conf
+rm /etc/portage/make.conf.bkup
 
 EOF
 
