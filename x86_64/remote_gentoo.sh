@@ -171,7 +171,7 @@ emerge --sync
 
 cp /usr/share/zoneinfo/GMT /etc/localtime
 
-emerge --update --deep --with-bdeps=y --newuse world
+emerge --update --deep --with-bdeps=y --newuse --keep-going world
 
 cd /usr/src/linux
 mv /tmp/.config ./.config
