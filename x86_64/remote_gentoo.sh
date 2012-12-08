@@ -171,6 +171,13 @@ emerge --sync
 
 cp /usr/share/zoneinfo/GMT /etc/localtime
 
+emerge layman 
+USE="-cgi -curl -emacs -gtk -iconv -perl -python -tk -webdav -xinetd -cvs -subversion" emerge git
+echo "source /var/lib/layman/make.conf" >> /etc/portage/make.conf
+layman -f -a rich0
+
+emerge -u portage
+
 emerge --update --deep --with-bdeps=y --newuse --keep-going world
 
 cd /usr/src/linux
@@ -205,6 +212,7 @@ chmod 755 /mnt/gentoo/tmp/build.sh
 mount -t proc none /mnt/gentoo/proc
 mount --rbind /dev /mnt/gentoo/dev
 mount --rbind /dev/pts /mnt/gentoo/dev/pts
+mount -t tmpfs none /mnt/gentoo/var/tmp
 
 chroot /mnt/gentoo /tmp/build.sh
 
