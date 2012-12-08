@@ -29,13 +29,18 @@ rm /mnt/gentoo/etc/portage/make.profile
 rm /mnt/gentoo/etc/make.profile
 ln -s /usr/portage/profiles/default/linux/amd64/10.0/desktop/kde /mnt/gentoo/etc/portage/make.profile
 
+#force portage update for eapi5
 
-#chroot /mnt/gentoo /usr/sbin/env-update
-# chroot /mnt/gentoo /usr/bin/emerge x11-libs/libSM
+mount -t proc none /mnt/gentoo/proc
+mount --rbind /dev /mnt/gentoo/dev
+mount --rbind /dev/pts /mnt/gentoo/dev/pts
 
-#umount /mnt/gentoo/proc
-#umount -l /mnt/gentoo/dev/pts
-#umount -l /mnt/gentoo/dev
+chroot /mnt/gentoo /usr/sbin/env-update
+chroot /mnt/gentoo /usr/bin/emerge sys-apps/portage
+
+umount /mnt/gentoo/proc
+umount -l /mnt/gentoo/dev/pts
+umount -l /mnt/gentoo/dev
 
 }
 
