@@ -28,7 +28,7 @@ mount /dev/xvdf /mnt/gentoo
 
 cd /tmp
 echo "Download stage3"
-curl -O http://gentoo.mirrors.pair.com/releases/amd64/autobuilds/`curl --silent http://gentoo.mirrors.pair.com/releases/amd64/autobuilds/latest-stage3-amd64.txt | grep stage3-amd64`
+curl -O http://gentoo.mirrors.pair.com/releases/amd64/autobuilds/`curl --silent http://gentoo.mirrors.pair.com/releases/amd64/autobuilds/latest-stage3.txt | grep stage3-amd64 | grep -v nomultilib`
 echo "Download portage"
 curl -O http://gentoo.mirrors.pair.com/snapshots/portage-latest.tar.bz2
 echo "Unpack stage3"
