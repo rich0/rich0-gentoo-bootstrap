@@ -209,7 +209,7 @@ chmod 755 /mnt/gentoo/tmp/build.sh
 mount -t proc none /mnt/gentoo/proc
 mount --rbind /dev /mnt/gentoo/dev
 mount --rbind /dev/pts /mnt/gentoo/dev/pts
-mount -t tmpfs none /mnt/gentoo/var/tmp
+mount -t tmpfs -o size=2g none /mnt/gentoo/var/tmp
 
 chroot /mnt/gentoo /tmp/build.sh
 

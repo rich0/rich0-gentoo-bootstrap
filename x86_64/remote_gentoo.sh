@@ -111,8 +111,8 @@ CHOST="x86_64-pc-linux-gnu"
 # These are the USE flags that were used in addition to what is provided by the
 # profile used for building.
 USE="mmx sse sse2"
-MAKEOPTS="-j3"
-EMERGE_DEFAULT_OPTS="--jobs=2 --load-average=4.0"
+MAKEOPTS="-j10"
+EMERGE_DEFAULT_OPTS="--jobs=6 --load-average=16.0"
 EOF
 
 mkdir -p /mnt/gentoo/etc/portage
@@ -212,7 +212,7 @@ chmod 755 /mnt/gentoo/tmp/build.sh
 mount -t proc none /mnt/gentoo/proc
 mount --rbind /dev /mnt/gentoo/dev
 mount --rbind /dev/pts /mnt/gentoo/dev/pts
-mount -t tmpfs none /mnt/gentoo/var/tmp
+mount -t tmpfs -o size=2g none /mnt/gentoo/var/tmp
 
 chroot /mnt/gentoo /tmp/build.sh
 

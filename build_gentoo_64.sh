@@ -123,12 +123,12 @@ echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: bootstrap image = $boot
 echo "$building $start_time - `date +%Y-%m-%dT%H:%M:%S`: starting bootstrap instance"
 
 spotreq=`ec2-request-spot-instances \
---price .15 \
+--price .25 \
 --region $region \
 $boot_image \
 --group $group \
 --key $key \
---instance-type c1.medium \
+--instance-type c1.xlarge \
 --block-device-mapping "/dev/sdf=:10:false" \
 | grep "^SPOTINSTANCEREQUEST" \
 | awk '{ print $2 }'`
