@@ -1,0 +1,61 @@
+# Test plugin
+
+plugin_prebuild ()
+{
+cat <<'EOF' >> /mnt/gentoo/var/lib/portage/world
+app-portage/eix
+app-portage/cfg-update
+gnome-base/gnome
+net-misc/x2goserver
+EOF
+
+cat <<'EOF' >> /mnt/gentoo/etc/portage/make.conf
+USE="$USE X minizip"
+EOF
+
+cat <<'EOF' >> /mnt/gentoo/etc/portage/package.use
+#required by x11-drivers/xf86-video-vmware-12.0.2-r1, required by x11-base/xorg-drivers-1.13[video_cards_vmware], required by x11-base/xorg-server-1.13.0-r1[xorg], required by x11-drivers/xf86-video-glint-1.2.8
+>=x11-libs/libdrm-2.4.40 libkms
+#required by x11-misc/alacarte-0.13.2, required by gnome-base/gnome-2.32.1-r2, required by @selected, required by @world (argument)
+=gnome-base/gnome-menus-2.30.5 python
+#required by gnome-extra/hamster-applet-2.32.1, required by gnome-base/gnome-2.32.1-r2, required by @selected, required by @world (argument)
+=dev-lang/python-2.7.3-r2 sqlite
+#required by x11-drivers/xf86-video-vmware-12.0.2-r1, required by x11-base/xorg-drivers-1.13[video_cards_vmware], required by x11-base/xorg-server-1.13.0-r1[xorg], required by x11-drivers/xf86-video-glint-1.2.8
+=media-libs/mesa-9.0 xa
+
+=x11-libs/gtk+-3.4.4 -colord
+EOF
+
+mkdir /mnt/gentoo/etc/portage
+cat <<'EOF' >> /mnt/gentoo/etc/portage/package.keywords
+net-misc/x2goserver
+EOF
+
+cat <<'EOF' >> /mnt/gentoo/etc/portage/package.unmask
+EOF
+
+rm /mnt/gentoo/etc/portage/make.profile
+ln -s /usr/portage/profiles/default/linux/x86/10.0/desktop/gnome /mnt/gentoo/etc/portage/make.profile
+
+#force portage update for eapi5
+
+mount -t proc none /mnt/gentoo/proc
+mount --rbind /dev /mnt/gentoo/dev
+mount --rbind /dev/pts /mnt/gentoo/dev/pts
+
+chroot /mnt/gentoo /usr/sbin/env-update
+chroot /mnt/gentoo /usr/bin/emerge sys-apps/portage
+
+umount /mnt/gentoo/proc
+umount -l /mnt/gentoo/dev/pts
+umount -l /mnt/gentoo/dev
+
+}
+
+plugin_postbuild ()
+{
+chroot /mnt/gentoo /usr/bin/eix-update
+chroot /mnt/gentoo /usr/sbin/x2godbadmin --createdb
+
+rc-update add dbus default
+}
