@@ -29,12 +29,12 @@ mount /dev/xvdf /mnt/gentoo
 cd /tmp
 echo "Download stage3"
 curl -O http://gentoo.mirrors.pair.com/releases/x86/autobuilds/`curl --silent http://gentoo.mirrors.pair.com/releases/x86/autobuilds/latest-stage3-i686.txt | grep stage3-i686`
-echo "Download portage"
-curl -O http://gentoo.mirrors.pair.com/snapshots/portage-latest.tar.bz2
+#echo "Download portage"
+#curl -O http://gentoo.mirrors.pair.com/snapshots/portage-latest.tar.bz2
 echo "Unpack stage3"
 tar -xjpf /tmp/stage3-*.tar.bz2 -C /mnt/gentoo
-echo "Unpack portage"
-tar -xjf /tmp/portage*.tar.bz2 -C /mnt/gentoo/usr
+#echo "Unpack portage"
+#tar -xjf /tmp/portage*.tar.bz2 -C /mnt/gentoo/usr
 
 echo "Setup files"
 
@@ -164,7 +164,8 @@ cat <<'EOF'>/mnt/gentoo/tmp/build.sh
 env-update
 source /etc/profile
 
-emerge --sync
+#emerge --sync
+emerge-webrsync
 
 cp /usr/share/zoneinfo/GMT /etc/localtime
 
