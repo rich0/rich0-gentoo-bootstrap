@@ -31,6 +31,8 @@ EOF
 mkdir /mnt/gentoo/etc/portage
 cat <<'EOF' >> /mnt/gentoo/etc/portage/package.keywords
 net-misc/x2goserver
+
+=x11-drivers/xf86-video-mach64-6.9.4
 EOF
 
 cat <<'EOF' >> /mnt/gentoo/etc/portage/package.unmask
