@@ -204,20 +204,23 @@ rm /etc/portage/make.conf.bkup
 EOF
 
 plugin_prebuild
+prebstat=$?
 
 chmod 755 /mnt/gentoo/tmp/build.sh
 
 mount -t proc none /mnt/gentoo/proc
 mount --rbind /dev /mnt/gentoo/dev
 mount --rbind /dev/pts /mnt/gentoo/dev/pts
-mount -t tmpfs -o size=2g none /mnt/gentoo/var/tmp
+#mount -t tmpfs -o size=2g none /mnt/gentoo/var/tmp
 
 chroot /mnt/gentoo /tmp/build.sh
+bdstat=$?
 
 plugin_postbuild
+pstbstat=$?
 
 rm -fR /mnt/gentoo/tmp/*
 rm -fR /mnt/gentoo/var/tmp/*
 rm -fR /mnt/gentoo/usr/portage/distfiles/*
 
-shutdown -h now
+[[ $prebstat -eq 0 ]] && [[ $bdstat -eq 0 ]] && [[ $pstbstat -eq 0 ]] && shutdown -h now
