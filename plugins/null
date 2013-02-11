@@ -1,0 +1,11 @@
+# Null plugin
+
+plugin_prebuild ()
+{
+echo
+}
+
+plugin_postbuild ()
+{
+echo
+}

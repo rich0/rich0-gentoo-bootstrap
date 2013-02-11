@@ -36,6 +36,7 @@ key=$3
 #keyfile="$HOME/.ssh/example.pem"
 keyfile=$4
 
+plugin="plugins/null"
 # Plugin to install
 if [[ -e $5 ]] ; then
     plugin=$5
