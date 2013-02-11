@@ -26,6 +26,10 @@ cat <<'EOF' >> /mnt/gentoo/etc/portage/package.use
 =media-libs/mesa-9.0 xa
 
 =x11-libs/gtk+-3.4.4 -colord
+
+#required by x11-drivers/xf86-video-vmware-12.0.2-r1, required by x11-base/xorg-drivers-1.13[video_cards_vmware], required by x11-base/xorg-server-1.13.1[xorg], required by x11-drivers/xf86-video-glint-1.2.8
+>=media-libs/mesa-9.0.1 xa
+
 EOF
 
 mkdir /mnt/gentoo/etc/portage
@@ -62,5 +66,5 @@ plugin_postbuild ()
 chroot /mnt/gentoo /usr/bin/eix-update
 chroot /mnt/gentoo /usr/sbin/x2godbadmin --createdb
 
-rc-update add dbus default
+chroot /mnt/gentoo rc-update add dbus default
 }
