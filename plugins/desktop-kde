@@ -10,7 +10,7 @@ net-misc/x2goserver
 EOF
 
 cat <<'EOF' >> /mnt/gentoo/etc/portage/make.conf
-USE="$USE X minizip"
+USE="$USE X minizip python"
 EOF
 
 
@@ -32,6 +32,8 @@ mount --rbind /dev /mnt/gentoo/dev
 mount --rbind /dev/pts /mnt/gentoo/dev/pts
 
 chroot /mnt/gentoo /usr/sbin/env-update
+chroot /mnt/gentoo /usr/bin/emerge-webrsync
+chroot /mnt/gentoo /usr/bin/emerge --unmerge module-init-tools
 chroot /mnt/gentoo /usr/bin/emerge sys-apps/portage
 
 umount /mnt/gentoo/proc

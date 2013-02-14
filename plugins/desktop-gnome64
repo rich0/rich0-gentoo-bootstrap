@@ -23,13 +23,9 @@ cat <<'EOF' >> /mnt/gentoo/etc/portage/package.use
 #required by gnome-extra/hamster-applet-2.32.1, required by gnome-base/gnome-2.32.1-r2, required by @selected, required by @world (argument)
 =dev-lang/python-2.7.3-r2 sqlite
 #required by x11-drivers/xf86-video-vmware-12.0.2-r1, required by x11-base/xorg-drivers-1.13[video_cards_vmware], required by x11-base/xorg-server-1.13.0-r1[xorg], required by x11-drivers/xf86-video-glint-1.2.8
-=media-libs/mesa-9.0 xa
+media-libs/mesa xa
 
 =x11-libs/gtk+-3.4.4 -colord
-
-#required by x11-drivers/xf86-video-vmware-12.0.2-r1, required by x11-base/xorg-drivers-1.13[video_cards_vmware], required by x11-base/xorg-server-1.13.1[xorg], required by x11-drivers/xf86-video-glint-1.2.8
->=media-libs/mesa-9.0.1 xa
-
 EOF
 
 mkdir /mnt/gentoo/etc/portage
