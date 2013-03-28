@@ -40,7 +40,7 @@ EOF
 
 rm /mnt/gentoo/etc/portage/make.profile
 rm /mnt/gentoo/etc/make.profile
-ln -s /usr/portage/profiles/default/linux/amd64/10.0/desktop/gnome /mnt/gentoo/etc/portage/make.profile
+ln -s /usr/portage/profiles/default/linux/amd64/13.0/desktop/gnome /mnt/gentoo/etc/portage/make.profile
 
 #force portage update for eapi5
 
