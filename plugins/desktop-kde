@@ -23,7 +23,7 @@ cat <<'EOF' >> /mnt/gentoo/etc/portage/package.unmask
 EOF
 
 rm /mnt/gentoo/etc/portage/make.profile
-ln -s /usr/portage/profiles/default/linux/x86/10.0/desktop/kde /mnt/gentoo/etc/portage/make.profile
+ln -s /usr/portage/profiles/default/linux/x86/13.0/desktop/kde /mnt/gentoo/etc/portage/make.profile
 
 #Fix for EAPI5
 
