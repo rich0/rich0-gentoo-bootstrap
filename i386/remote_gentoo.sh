@@ -164,15 +164,15 @@ cat <<'EOF'>/mnt/gentoo/tmp/build.sh
 env-update
 source /etc/profile
 
-#emerge --sync
 emerge-webrsync
 
 cp /usr/share/zoneinfo/GMT /etc/localtime
 
-emerge layman 
-USE="-cgi -curl -emacs -gtk -iconv -perl -python -tk -webdav -xinetd -cvs -subversion" emerge git
-echo "source /var/lib/layman/make.conf" >> /etc/portage/make.conf
-layman -f -a rich0
+# install layman when overlay needed
+#emerge layman 
+#USE="-cgi -curl -emacs -gtk -iconv -perl -python -tk -webdav -xinetd -cvs -subversion" emerge git
+#echo "source /var/lib/layman/make.conf" >> /etc/portage/make.conf
+#layman -f -a rich0
 
 emerge -u portage
 
@@ -211,7 +211,6 @@ chmod 755 /mnt/gentoo/tmp/build.sh
 mount -t proc none /mnt/gentoo/proc
 mount --rbind /dev /mnt/gentoo/dev
 mount --rbind /dev/pts /mnt/gentoo/dev/pts
-#mount -t tmpfs -o size=2g none /mnt/gentoo/var/tmp
 
 chroot /mnt/gentoo /tmp/build.sh
 bdstat=$?

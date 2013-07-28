@@ -9,7 +9,6 @@ mount --rbind /dev/pts /mnt/gentoo/dev/pts
 
 chroot /mnt/gentoo /usr/sbin/env-update
 chroot /mnt/gentoo /usr/bin/emerge-webrsync
-chroot /mnt/gentoo /usr/bin/emerge --unmerge module-init-tools
 
 umount /mnt/gentoo/proc
 umount -l /mnt/gentoo/dev/pts

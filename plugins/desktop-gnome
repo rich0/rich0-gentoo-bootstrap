@@ -1,4 +1,4 @@
-# Test plugin
+# 32-bit Gnome Desktop
 
 plugin_prebuild ()
 {
@@ -24,13 +24,19 @@ cat <<'EOF' >> /mnt/gentoo/etc/portage/package.use
 media-libs/mesa xa
 
 =x11-libs/gtk+-3.4.4 -colord
+
+# required by media-libs/mesa-9.1.2-r1
+# required by x11-libs/cairo-1.10.2-r3[opengl]
+# required by x11-libs/gtk+-2.24.17
+# required by gnome-base/gconf-2.32.4-r1
+# required by gnome-base/gnome-keyring-2.32.1-r1
+# required by gnome-base/libgnome-keyring-2.32.0
+>=dev-libs/libxml2-2.9.1-r1 python
 EOF
 
 mkdir /mnt/gentoo/etc/portage
 cat <<'EOF' >> /mnt/gentoo/etc/portage/package.keywords
 net-misc/x2goserver
-
-=x11-drivers/xf86-video-mach64-6.9.4
 EOF
 
 cat <<'EOF' >> /mnt/gentoo/etc/portage/package.unmask
@@ -47,7 +53,6 @@ mount --rbind /dev/pts /mnt/gentoo/dev/pts
 
 chroot /mnt/gentoo /usr/sbin/env-update
 chroot /mnt/gentoo /usr/bin/emerge-webrsync
-chroot /mnt/gentoo /usr/bin/emerge --unmerge module-init-tools
 chroot /mnt/gentoo /usr/bin/emerge sys-apps/portage
 
 umount /mnt/gentoo/proc

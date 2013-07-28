@@ -1,4 +1,4 @@
-# Test plugin
+# Creates a KDE-based amd64 desktop.
 
 plugin_prebuild ()
 {
