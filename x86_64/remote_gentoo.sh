@@ -28,7 +28,7 @@ mount /dev/xvdf /mnt/gentoo
 
 cd /tmp
 echo "Download stage3"
-curl -O http://gentoo.mirrors.pair.com/releases/amd64/autobuilds/`curl --silent http://gentoo.mirrors.pair.com/releases/amd64/autobuilds/latest-stage3.txt | grep stage3-amd64 | grep -v nomultilib`
+curl -O http://gentoo.mirrors.pair.com/releases/amd64/autobuilds/`curl --silent http://gentoo.mirrors.pair.com/releases/amd64/autobuilds/latest-stage3.txt | grep stage3-amd64 | grep -v nomultilib | grep -v hardened | grep -v uclibc`
 #echo "Download portage"
 #curl -O http://gentoo.mirrors.pair.com/snapshots/portage-latest.tar.bz2
 echo "Unpack stage3"
@@ -111,8 +111,8 @@ CHOST="x86_64-pc-linux-gnu"
 # These are the USE flags that were used in addition to what is provided by the
 # profile used for building.
 USE="mmx sse sse2"
-MAKEOPTS="-j10"
-EMERGE_DEFAULT_OPTS="--jobs=6 --load-average=16.0"
+MAKEOPTS="-j16"
+EMERGE_DEFAULT_OPTS="--jobs=12 --load-average=32.0"
 EOF
 
 mkdir -p /mnt/gentoo/etc/portage
@@ -182,10 +182,11 @@ emerge -u portage
 emerge --update --deep --with-bdeps=y --newuse --keep-going world
 
 cd /usr/src/linux
-mv /tmp/.config ./.config
-yes "" | make oldconfig
-make -j4 && make -j4 modules_install
-cp -L arch/x86_64/boot/bzImage /boot/bzImage
+mkdir /var/tmp/linux
+mv /tmp/.config /var/tmp/linux/.config
+yes "" | make O=/var/tmp/linux/ oldconfig
+make -j16 O=/var/tmp/linux/ && make O=/var/tmp/linux/ modules_install
+cp -L /var/tmp/linux/arch/x86_64/boot/bzImage /boot/bzImage
 
 groupadd sudo
 useradd -r -m -s /bin/bash ec2-user
@@ -214,7 +215,7 @@ chmod 755 /mnt/gentoo/tmp/build.sh
 mount -t proc none /mnt/gentoo/proc
 mount --rbind /dev /mnt/gentoo/dev
 mount --rbind /dev/pts /mnt/gentoo/dev/pts
-mount -t tmpfs -o size=4g none /mnt/gentoo/var/tmp
+mount -t tmpfs -o size=8g none /mnt/gentoo/var/tmp
 
 chroot /mnt/gentoo /tmp/build.sh
 bdstat=$?
