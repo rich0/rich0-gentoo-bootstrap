@@ -29,73 +29,10 @@ mount /dev/xvdf /mnt/gentoo
 cd /tmp
 echo "Download stage3"
 curl -O http://gentoo.mirrors.pair.com/releases/amd64/autobuilds/`curl --silent http://gentoo.mirrors.pair.com/releases/amd64/autobuilds/latest-stage3.txt | grep stage3-amd64 | grep -v nomultilib | grep -v hardened | grep -v uclibc`
-#echo "Download portage"
-#curl -O http://gentoo.mirrors.pair.com/snapshots/portage-latest.tar.bz2
 echo "Unpack stage3"
 tar -xjpf /tmp/stage3-*.tar.bz2 -C /mnt/gentoo
-#echo "Unpack portage"
-#tar -xjf /tmp/portage*.tar.bz2 -C /mnt/gentoo/usr
 
 echo "Setup files"
-
-mkdir -p /mnt/gentoo/boot/grub
-echo "/boot/grub/menu.lst"
-cat <<'EOF'>/mnt/gentoo/boot/grub/menu.lst
-default 0
-timeout 3
-title EC2
-root (hd0)
-kernel /boot/bzImage root=/dev/xvda1 rootfstype=ext4
-EOF
-
-echo "/etc/fstab"
-cat <<'EOF'>/mnt/gentoo/etc/fstab
-/dev/xvda1 / ext4 defaults 1 1
-/dev/xvda3 none swap sw 0 0
-none /dev/pts devpts gid=5,mode=620 0 0
-none /dev/shm tmpfs defaults 0 0
-none /proc proc defaults 0 0
-none /sys sysfs defaults 0 0
-EOF
-
-mkdir -p /mnt/gentoo/etc/local.d
-echo "/etc/local.d/killall_nash-hotplug.start"
-cat <<'EOF'>/mnt/gentoo/etc/local.d/killall_nash-hotplug.start
-# /etc/local.d/killall_nash-hotplug.start
-
-killall nash-hotplug
-EOF
-chmod 755 /mnt/gentoo/etc/local.d/killall_nash-hotplug.start
-
-echo "/etc/local.d/public-keys.start"
-cat <<'EOF'>/mnt/gentoo/etc/local.d/public-keys.start
-# /etc/local.d/public-keys.start
-
-[ ! -e /home/ec2-user ] && cp -r /etc/skel /home/ec2-user && chown -R ec2-user /home/ec2-user && chgrp -R ec2-user /home/ec2-user
-if [ ! -d /home/ec2-user/.ssh ] ; then
-mkdir -p /home/ec2-user/.ssh
-chmod 700 /home/ec2-user/.ssh
-chown ec2-user /home/ec2-user/.ssh
-chgrp ec2-user /home/ec2-user/.ssh
-fi
-curl http://169.254.169.254/latest/meta-data/public-keys/0/openssh-key > /tmp/my-key
-if [ $? -eq 0 ] ; then
-cat /tmp/my-key >> /home/ec2-user/.ssh/authorized_keys
-chmod 600 /home/ec2-user/.ssh/authorized_keys
-chown ec2-user /home/ec2-user/.ssh/authorized_keys
-chgrp ec2-user /home/ec2-user/.ssh/authorized_keys
-rm /tmp/my-key
-fi
-EOF
-chmod 755 /mnt/gentoo/etc/local.d/public-keys.start
-
-echo "/etc/local.d/public-keys.stop"
-cat <<'EOF'>/mnt/gentoo/etc/local.d/public-keys.stop
-# /etc/local.d/public-keys.stop
-
-rm -f /home/ec2-user/.ssh/authorized_keys
-EOF
-chmod 755 /mnt/gentoo/etc/local.d/public-keys.stop
 
 echo "/etc/portage/make.conf"
 cat <<'EOF'>/mnt/gentoo/etc/portage/make.conf
@@ -119,19 +56,6 @@ mkdir -p /mnt/gentoo/etc/portage
 
 echo "/etc/resolv.conf"
 cp -L /etc/resolv.conf /mnt/gentoo/etc/resolv.conf
-
-mkdir -p /mnt/gentoo/etc/sudoers.d
-echo "/etc/sudoers.d/ec2-user"
-cat <<'EOF'>/mnt/gentoo/etc/sudoers.d/ec2-user
-ec2-user  ALL=(ALL) NOPASSWD:ALL
-EOF
-chmod 440 /mnt/gentoo/etc/sudoers.d/ec2-user
-
-echo "/etc/sudoers.d/_sudo"
-cat <<'EOF'>/mnt/gentoo/etc/sudoers.d/_sudo
-%sudo     ALL=(ALL) ALL
-EOF
-chmod 440 /mnt/gentoo/etc/sudoers.d/_sudo
 
 echo "/usr/src/linux/.config"
 mkdir -p /mnt/gentoo/tmp
@@ -157,6 +81,7 @@ sys-fs/mdadm
 sys-kernel/gentoo-sources
 sys-process/fcron
 sys-process/atop
+sys-apps/ec2-shim
 EOF
 
 echo "/tmp/build.sh"
@@ -172,10 +97,10 @@ emerge-webrsync
 cp /usr/share/zoneinfo/GMT /etc/localtime
 
 # install layman when overlay needed
-#emerge layman 
-#USE="-cgi -curl -emacs -gtk -iconv -perl -python -tk -webdav -xinetd -cvs -subversion" emerge git
-#echo "source /var/lib/layman/make.conf" >> /etc/portage/make.conf
-#layman -f -a rich0
+emerge layman 
+USE="-cgi -curl -emacs -gtk -iconv -perl -python -tk -webdav -xinetd -cvs -subversion" emerge git
+echo "source /var/lib/layman/make.conf" >> /etc/portage/make.conf
+layman -f -a rich0
 
 emerge -u portage
 
@@ -204,6 +129,8 @@ rc-update add mdraid boot
 mv /etc/portage/make.conf /etc/portage/make.conf.bkup
 sed "s/MAKEOPTS=\"-j.*\"/MAKEOPTS=\"-j2\"/g" /etc/portage/make.conf.bkup > /etc/portage/make.conf
 rm /etc/portage/make.conf.bkup
+
+etc-update --automode -5
 
 EOF
 
